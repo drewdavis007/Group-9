@@ -1,5 +1,6 @@
 # Intro to SE Group-9
-Drew Davis (Team Leader) - wad108@msstate.edu 
+Drew Davis (Team Leader) - wad108@msstate.edu
+
 Hunter Lawson            - hrl104@msstate.edu
 Aadhav Senthil           - as5012@msstate.edu
 Gabriel Asare            - ga436@msstate.edu
