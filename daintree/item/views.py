@@ -2,9 +2,11 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Item
+from .models import Item, Category
 from django.contrib.auth.decorators import login_required
 from .forms import NewItemForm, EditItemForm
+from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
   
 
@@ -49,11 +51,6 @@ def new(request):
 
 @login_required
 def edit(request, pk):
-    # Check if the user has the 'seller' status
-    # if request.user.status != 'seller':
-    #     return redirect('/')
-        # return HttpResponseForbidden("You do not have permission to add new items.")
-    
     item = get_object_or_404(Item, pk=pk, created_by=request.user)
     if request.method == 'POST':
         form = EditItemForm(request.POST, request.FILES, instance=item)
@@ -67,3 +64,10 @@ def edit(request, pk):
         'form': form,
         'title': 'Edit Item',
     })
+
+@login_required
+def delete(request, pk):
+    item = get_object_or_404(Item, pk=pk, created_by=request.user)
+    item.delete()
+
+    return redirect('dashboard: index')
