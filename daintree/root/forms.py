@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import CustomUser  # Adjust the import path as needed
+from .models import CustomUser
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
@@ -49,5 +49,4 @@ class SignupForm(UserCreationForm):
 
     status = forms.ChoiceField(choices=STATUS_CHOICES, widget=forms.Select(attrs={
         'class': 'w-full py-4 px-6 rounded-xl',
-        # 'placeholder': 'Seller or Buyer',
     }))
