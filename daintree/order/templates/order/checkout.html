@@ -1,0 +1,56 @@
+{% extends 'root/base.html' %}
+{% block title %}Checkout{% endblock %}
+
+
+{% block content %}
+<div class="w-1/2 my-6 p-6 mx-auto bg-gray-100 rounded-xl">
+  <h1 class="mb-6 text-3xl" style="text-align: center;">Payment Information</h1>
+
+  <form method="post" action=".">
+      {% csrf_token %}
+
+      <h3 class="mb-3 text-2xl">Shipping Information</h3>
+
+      <div class="mb-3">
+        <label class="inline-block mb-2" for="address">Address:</label><br>
+        <input type="text" id="address" name="address" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="inline-block mb-2" for="city">City:</label><br>
+        <input type="text" id="city" name="city" required>
+      </div>
+      
+      <div class="mb-3">
+        <label class="inline-block mb-2" for="postcode">Postcode:</label><br>
+        <input type="text" id="postcode" name="postcode" required>
+      </div>
+
+
+      <h3 class="mt-6 mb-3 text-2xl">Card Information</h3>
+
+      <div class="mb-3">
+        <label class="inline-block mb-2" for="card_name">Card Holder Name:</label><br>
+        <input type="text" id="card_name" name="card_name" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="inline-block mb-2" for="card_number">Card Number:</label><br>
+        <input type="text" id="card_number" name="card_number" required>
+      </div>
+      
+      <div class="mb-3">
+        <label class="inline-block mb-2" for="expiry_date">Expiry Date:</label><br>
+        <input type="text" id="expiry_date" name="expiry_date" required>
+      </div>
+      
+      <div class="mb-3">
+        <label class="inline-block mb-2" for="cvc">CVC:</label><br>
+        <input type="text" id="cvc" name="cvc" required>
+      </div>
+
+      <button type="submit" class="py-4 px-8 text-lg bg-blue-500 hover:bg-blue-700 rounded-xl text-white">Place Order</button>
+
+  </form>
+</div>
+{% endblock %}

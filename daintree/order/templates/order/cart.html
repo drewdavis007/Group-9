@@ -1,0 +1,45 @@
+{% extends 'root/base.html' %}
+{% load cart_extras %}
+{% load cart_filters %}
+{% block title %}Cart{% endblock %}
+
+{% block content %}
+
+<div class="mt-4 px-6 py-12 bg-gray-100 rounded-xl">
+    <h2 class="mb-12 text-2xl text-center">Your Shopping Cart</h2>
+
+    <div class="grid grid-cols-3 gap-3">
+        {% for cart_item in cart.items.all %}
+        <div class="relative">
+            <a href="{% url 'item:detail' cart_item.item.id %}">
+                <img src="{{ cart_item.item.image.url }}" class="rounded-t-xl">
+            
+                <!-- Visible Delete Button -->
+                <a href="{% url 'order:remove_from_cart' cart_item.id %}"
+                    class="mr-6 mt-6 absolute right-0 mt-6 px-6 py-3 text-lg font-semibold bg-red-500 text-white rounded-xl hover:bg-red-700">
+                    Delete
+                </a>
+
+                <div class="p-6 bg-white rounded-b-xl">
+                    <h2 class="text-2xl">{{ cart_item.item.name }}</h2>
+                    <p class="text-gray-500 text-gray-400">Price: {{ cart_item.item.price }}</p>
+                    <p class="text-gray-500">Quantity: {{ cart_item.quantity }}</p>
+                </div>
+            </a>
+        </div>
+        {% empty %}
+            <p>Your cart is empty.</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% if cart.items.all %}
+    <div class="cart-total mt-4 px-6">
+        <strong>Total:</strong> ${{ cart.items.all|cart_total }}
+    </div>
+    <div class="mt-4">
+        <a href="{% url 'order:checkout' %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-blue-500 text-white rounded-xl hover:bg-blue-700">Proceed To Checkout</a>
+    </div>
+{% endif %}
+
+{% endblock %}
