@@ -1,7 +1,9 @@
 {% extends 'root/base.html' %}
 {% load cart_extras %}
 {% load cart_filters %}
+{% load cart_tags %}
 {% block title %}Cart{% endblock %}
+
 
 {% block content %}
 
@@ -14,16 +16,28 @@
             <a href="{% url 'item:detail' cart_item.item.id %}">
                 <img src="{{ cart_item.item.image.url }}" class="rounded-t-xl">
             
-                <!-- Visible Delete Button -->
                 <a href="{% url 'order:remove_from_cart' cart_item.id %}"
-                    class="mr-6 mt-6 absolute right-0 mt-6 px-6 py-3 text-lg font-semibold bg-red-500 text-white rounded-xl hover:bg-red-700">
+                    class="mr-6 mt-4 absolute right-0 px-3 py-3 text-lg font-semibold bg-red-500 text-white rounded-xl hover:bg-red-700">
                     Delete
                 </a>
 
                 <div class="p-6 bg-white rounded-b-xl">
                     <h2 class="text-2xl">{{ cart_item.item.name }}</h2>
                     <p class="text-gray-500 text-gray-400">Price: {{ cart_item.item.price }}</p>
-                    <p class="text-gray-500">Quantity: {{ cart_item.quantity }}</p>
+                    <p class="text-gray-500 text-gray-400">Quantity: {{ cart_item.quantity }}</p>
+                    
+                    <form method="post" action="{% url 'order:update_item_quantity' cart_item.id %}">
+                        <button type="submit" class="inline-block mt-3 px-3 py-3 text-lg font-semibold bg-yellow-500 text-white rounded-xl hover:bg-yellow-700">Update Quantity</button>
+                        {% csrf_token %}
+                        <select name="quantity" class="quantity-select">
+                            {% for number in 1|to:20 %}
+                            <option value="{{ number }}" {% if cart_item.quantity == number %}selected{% endif %}>{{ number }}</option>
+                            {% endfor %}
+                        </select>
+                        
+                    </form>
+
+                    
                 </div>
             </a>
         </div>
@@ -34,7 +48,7 @@
 </div>
 
 {% if cart.items.all %}
-    <div class="cart-total mt-4 px-6">
+    <div class="cart-total mt-4 px-6" id="cart-total">
         <strong>Total:</strong> ${{ cart.items.all|cart_total }}
     </div>
     <div class="mt-4">
