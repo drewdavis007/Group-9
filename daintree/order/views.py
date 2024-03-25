@@ -12,10 +12,20 @@ def add_to_cart(request, pk):
     
     if not created:
         # If the item already exists in the cart, increment the quantity
-        cart_item.quantity += 1
+        cart_item.quantity = 1
         cart_item.save()
     
     return redirect('item:detail', pk=item.id)
+
+
+@login_required
+def update_item_quantity(request, pk):
+    if request.method == 'POST':
+        quantity = request.POST.get('quantity')
+        cart_item = get_object_or_404(CartItem, pk=pk, cart__user=request.user)
+        cart_item.quantity = quantity
+        cart_item.save()
+    return redirect('order:view_cart')
 
 
 @login_required
