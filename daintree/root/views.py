@@ -6,7 +6,7 @@ from .forms import SignupForm
 
 
 def index(request):
-    items = Item.objects.filter(is_sold=False)
+    items = Item.objects.filter(is_sold=False, is_approved=True)
     categories = Category.objects.all
     return render(request, 'root/index.html', {
         'categories': categories,
