@@ -1,10 +1,14 @@
 from django import forms
-from .models import Item
+from .models import Item, Category
 
 
 INPUT_CLASSES = 'w-full py-4 rounded-xl border'
 
 class NewItemForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(NewItemForm, self).__init__(*args, **kwargs)
+        self.fields['category'].queryset = Category.objects.filter(parent__isnull=False)
+    
     class Meta:
         model = Item
         fields = ('category', 'name', 'description', 'price', 'image')

@@ -13,7 +13,7 @@ from django.db.models import Q
 def items(request):
     query = request.GET.get('query', '')
     category_id = request.GET.get('category', 0)
-    categories =  Category.objects.all()
+    categories =  Category.objects.filter(parent__isnull=False)
     items = Item.objects.filter(is_sold=False, is_approved=True) 
 
     #filter on category
@@ -34,7 +34,7 @@ def items(request):
 
 def detail(request, pk):
     item = get_object_or_404(Item, pk=pk)
-    related_items = Item.objects.filter(category=item.category, is_sold=False).exclude(pk=pk)[0:3]
+    related_items = Item.objects.filter(category=item.category, is_sold=False, is_approved=True).exclude(pk=pk)[0:3]
 
     return render(request, 'item/detail.html',{
         'item':item,
@@ -46,7 +46,6 @@ def new(request):
     # Check if the user has the 'seller' status
     if request.user.status != 'seller':
         return redirect('/')
-        # return HttpResponseForbidden("You do not have permission to add new items.")
     
     if request.method == 'POST':
         form = NewItemForm(request.POST, request.FILES)

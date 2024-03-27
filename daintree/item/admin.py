@@ -2,7 +2,12 @@ from django.contrib import admin
 from .models import Category, Item
 
 # Register your models here.
-admin.site.register(Category)
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ['name', 'parent']
+    list_filter = ['parent']
+    search_fields = ['name', 'parent__name']
+    
 
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
