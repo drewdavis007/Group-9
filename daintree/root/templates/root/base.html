@@ -19,11 +19,13 @@
             <div class="space-x-6">
                 <!-- Checkout -->
                 <a href="{% url 'order:view_cart' %}" class="py-3 px-6 text-lg font-semibold text-white rounded-xl">&#128722</a> 
-                <a href="{% url 'item:new' %}" class="text-lg font-semibold hover:text-gray-500">New item</a>
                 <a href="{% url 'item:items' %}"  class="text-lg font-semibold hover:text-gray-500">Search</a>
                 
                 <!-- Conditionally render the following links based on authentication status -->
                 {% if request.user.is_authenticated %}
+
+                    <a href="{% url 'item:new' %}" class="text-lg font-semibold hover:text-gray-500">New item</a>
+
                     <a href="{% url 'conversation:inbox' %}" class="py-3 px-6 text-lg font-semibold bg-blue-500 text-white rounded-xl hover:bg-blue-700">Inbox</a>
                     <a href="{% url 'dashboard:index' %}" class="py-3 px-6 text-lg font-semibold bg-gray-500 text-white rounded-xl hover:bg-gray-700">Dashboard</a>
 
@@ -44,6 +46,19 @@
             {% block content %}
             {% endblock %}
         </div>
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="py-6 px-6 pd-6 {{ message.tags }} text-gray-500 mb-2"><strong>
+                        {{ message }}
+                    </strong>
+                        
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         
         <footer class="py-6 px-6 flex justify-between bg-gray-800">
             <div class="w-2/3 pr-10">

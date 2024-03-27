@@ -5,7 +5,8 @@ from django.conf import settings
 
 class Category(models.Model):
     name = models.CharField(max_length=225)
-
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+    
     class Meta:
         ordering = ('name',)
         verbose_name_plural = 'Categories'
@@ -13,6 +14,7 @@ class Category(models.Model):
     
     def __str__(self) -> str:
         return self.name
+    
     
 class Item(models.Model):
     category = models.ForeignKey(Category, related_name='items', on_delete=models.CASCADE)

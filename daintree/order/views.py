@@ -64,6 +64,10 @@ def checkout(request):
         #delete the cart if it's no longer needed
         cart.delete()
 
-        return redirect('/')
+        return redirect('order:confirmation')
 
     return render(request,'order/checkout.html')
+
+
+def confirmation(request):
+     return render(request, 'order/confirmation.html')

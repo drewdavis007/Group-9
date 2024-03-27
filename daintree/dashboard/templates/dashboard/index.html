@@ -4,22 +4,64 @@
 
 {% block content %}
     <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
-        <h2 class="mb-12 text-2xl text-center">My items</h2>
+        {% if status == "seller" %}
+            <h2 class="mb-12 text-2xl text-center">My items</h2>
 
-         <div class="grid grid-cols-3 gap-3">
-            {% for item in items %}
-                <div>
-                    <a href="{% url 'item:detail' item.id %}">
-                        
-                        <img src="{{ item.image.url }}" class="rounded-t-xl">
-                        <div class="p-6 bg-white rounded-b-xl">
-                            <h2 class="text-2xl">{{item.name}}</h2>
-                            <p class="text-gray-500">Price: {{item.price}}</p>
+            <div class="grid grid-cols-3 gap-3">
+                {% for item in user_items %}
+                    <div>
+                        <a href="{% url 'item:detail' item.id %}">
+                            
+                            <img src="{{ item.image.url }}" class="rounded-t-xl">
+                            <div class="p-6 bg-white rounded-b-xl">
+                                <h2 class="text-2xl">{{item.name}}</h2>
+                                <p class="text-gray-500">Price: {{item.price}}</p>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+
+        {% else %}
+            <h2 class="mb-12 text-2xl text-center">My Order History</h2>
+            
+
+            <div class="grid grid-cols-3 gap-3">
+                {% for order in orders %}   
+                    {% if order.orderitem_set.all %}                 
+                        <div>
+                            <div class="p-6 bg-white rounded-b-xl">
+                                <p class="text-gray-500 mb-2"><strong>Order Date: {{ order.updated_at }}</strong></p>
+                                <p class="text-gray-500 mb-2">Amount Paid: {{ order.paid_amount }}</p>
+                                    
+                                <p class="text-gray-500 mb-2"><strong>Items:</strong></p>
+                                <ul>
+                                    {% for order_item in order.orderitem_set.all %}
+
+                                        <a href="{% url 'item:detail' order_item.item.id %}">
+
+                                            <li class="text-gray-500 mb-4 hover:bg-gray-700">
+                                                {{ order_item.item.name }} - Price: {{ order_item.price }} (Quantity: {{ order_item.quantity }})
+                                                <form action="{% url 'dashboard:return_item' order_item.id %}" method="post" style="display: inline;">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="mr-1 mt-2  right-0 px-2 py-2 text-lg font-semibold bg-red-500 text-white rounded-xl hover:bg-red-700">Return Item</button>
+                                                </form>
+                                            </li>
+                                        </a>
+
+                                        
+                                    {% endfor %}
+                                </ul>
+                            </div>
                         </div>
-                    </a>
-                </div>
-            {% endfor %}
-        </div>
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+        
     </div>
     
 {% endblock %}
