@@ -79,6 +79,6 @@ class OrderViewsTestCase(TestCase):
     def test_add_to_cart_view(self):
         # Test adding an item to the cart through the view
         response = self.client.post(reverse('order:add_to_cart', kwargs={'pk': self.item.pk}))
-        self.assertEqual(response.status_code, 302)  # Assuming the view redirects after adding
+        self.assertEqual(response.status_code, 302)  
         self.assertTrue(Cart.objects.exists())
         self.assertTrue(CartItem.objects.filter(item=self.item).exists())

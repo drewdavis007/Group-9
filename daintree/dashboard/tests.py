@@ -33,7 +33,6 @@ class DashboardViewTests(TestCase):
         self.assertContains(response, "My items")
 
     def test_dashboard_displays_items_for_buyer(self):
-        # Assuming 'status' field exists on your user model and can be 'seller'
         self.user.status = 'seller'
         self.user.save()
         
