@@ -81,16 +81,41 @@ class ItemListViewTest(TestCase):
 
 
 class ItemFormTest(TestCase):
+    def setUp(self):
+        self.test_category = Category.objects.create(name='Electronics')
+        self.user = get_user_model().objects.create_user(username='testuser', email='test@testing.com', password='testpassword')
 
     def test_item_form_valid_data(self):
-        test_category = Category.objects.create(name='Electronics')
         form_data = {
             'name': 'Test Item',
             'description': 'Some description here.',
             'price': 120.00,
-            'category': test_category, 
-            'created_by': 1,  # Assuming the user with ID 1 exists
+            'category': self.test_category.id,  # Use the category ID
+        }
+        form_files = {
             'image': SimpleUploadedFile('test_image.jpg', b'file_content', content_type='image/jpeg'),
+        }
+        form = NewItemForm(data=form_data, files=form_files)
+        print(form)
+        self.assertTrue(form.is_valid())
+
+
+class ItemFormTest(TestCase):
+    def setUp(self):
+        super().setUp()
+        parent_category = Category.objects.create(name='Electronics')
+        self.test_category = Category.objects.create(name='Smartphones', parent=parent_category)
+        self.user = get_user_model().objects.create_user(username='testuser', email='test@testing.com', password='testpassword')
+
+
+    def test_item_form_valid_data(self):
+        form_data = {
+            'name': 'Test Item',
+            'description': 'Some description here.',
+            'price': 120.00,
+            'category': self.test_category,  # Use the category ID
+            'image': SimpleUploadedFile('test_image.jpg', b'file_content', content_type='image/jpeg'),
+
         }
         form = NewItemForm(data=form_data)
         self.assertTrue(form.is_valid())
